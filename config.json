@@ -1,10 +1,10 @@
 {
-    "title": "Twitter Profile",
-    "description": "Notarize ownership of a twitter profile",
+    "title": "Alibi",
+    "description": "Notarise ownership of Google Timeline",
     "steps": [
         {
-            "title": "Visit Twitter website",
-            "cta": "Go to x.com",
+            "title": "Visit Google Timeline website",
+            "cta": "Go to timeline.google.com",
             "action": "start"
         },
         {
@@ -14,8 +14,8 @@
             "action": "two"
         },
         {
-            "title": "Notarize twitter profile",
-            "cta": "Notarize",
+            "title": "Notarise Google Timeline",
+            "cta": "Notarise",
             "action": "three",
             "prover": true
         }
@@ -25,14 +25,14 @@
         "notarize"
     ],
     "cookies": [
-        "api.x.com"
+        "timeline.google.com"
     ],
     "headers": [
-        "api.x.com"
+        "timeline.google.com"
     ],
     "requests": [
         {
-            "url": "https://api.x.com/1.1/account/settings.json",
+            "url": "https://timeline.google.com/maps/timeline/_rpc/ma",
             "method": "GET"
         }
     ]

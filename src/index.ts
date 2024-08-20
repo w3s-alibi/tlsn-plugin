@@ -1,3 +1,4 @@
+// @ts-ignore
 import icon from '../assets/icon.png';
 import config_json from '../config.json';
 import { redirect, notarize, outputJSON, getCookiesByHost, getHeadersByHost } from './utils/hf.js';
@@ -10,6 +11,7 @@ import { redirect, notarize, outputJSON, getCookiesByHost, getHeadersByHost } fr
  *  * the web requests it will query (or notarize)
  */
 export function config() {
+  // TODO: if we need to prove the pb param, can we get it for a given day? any args for config?
   outputJSON({
     ...config_json,
     icon: icon
@@ -18,7 +20,7 @@ export function config() {
 
 function isValidHost(urlString: string) {
   const url = new URL(urlString);
-  return url.hostname === 'twitter.com' || url.hostname === 'x.com';
+  return url.hostname === 'timeline.google.com';
 }
 
 /**
@@ -26,7 +28,7 @@ function isValidHost(urlString: string) {
   */
 export function start() {
   if (!isValidHost(Config.get('tabUrl'))) {
-    redirect('https://x.com');
+    redirect('https://timeline.google.com');
     outputJSON(false);
     return;
   }
@@ -35,13 +37,23 @@ export function start() {
 
 /**
  * Implementation of step "two".
- * This step collects and validates authentication cookies and headers for 'api.x.com'.
+ * This step collects and validates authentication cookies and headers for 'timeline.google.com'.
  * If all required information, it creates the request object.
  * Note that the url needs to be specified in the `config` too, otherwise the request will be refused.
  */
 export function two() {
-  const cookies = getCookiesByHost('api.x.com');
-  const headers = getHeadersByHost('api.x.com');
+  const cookies = getCookiesByHost('timeline.google.com');
+  const headers = getHeadersByHost('timeline.google.com');
+
+  // fuck knows if this works
+  console.log(JSON.stringify(headers))
+
+  // maybe this??
+  // debugger;
+
+  // TODO maybe get the date from the url here if poss
+  // request header path (note: date at the end) &pb=!1m2!1m1!1s2021-07-03
+  // /maps/timeline?pli=1&rapt=AEjHL4PSyX0XW3FGCnZaYAVzNoV-EosLZgGaSDkU8Za8lLxS08xJszDmI-nqndr1uqoqz40XP45DAsutgSe7jwKBmJPdCBCjm7zdXE_dt4gpQ6EglsnalbQ&pb=!1m2!1m1!1s2021-07-03
 
   if (
     !cookies.auth_token ||
@@ -54,12 +66,13 @@ export function two() {
   }
 
   outputJSON({
-    url: 'https://api.x.com/1.1/account/settings.json',
+    // TODO we need the pb param for the date
+    url: 'https://timeline.google.com/ma',
     method: 'GET',
     headers: {
-      'x-twitter-client-language': 'en',
+      // TODO: add headers as needed
       'x-csrf-token': headers['x-csrf-token'],
-      Host: 'api.x.com',
+      Host: 'timeline.google.com',
       authorization: headers.authorization,
       Cookie: `lang=en; auth_token=${cookies.auth_token}; ct0=${cookies.ct0}`,
       'Accept-Encoding': 'identity',
@@ -79,8 +92,11 @@ export function two() {
  *
  * In this example it locates the `screen_name` and excludes that range from the revealed response.
  */
-export function parseTwitterResp() {
+export function parseResp() {
   const bodyString = Host.inputString();
+
+  // TODO everything
+
   const params = JSON.parse(bodyString);
 
   if (params.screen_name) {
@@ -109,7 +125,7 @@ export function three() {
   } else {
     const id = notarize({
       ...params,
-      getSecretResponse: 'parseTwitterResp',
+      getSecretResponse: 'parseResp',
     });
     outputJSON(id);
   }

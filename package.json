@@ -1,7 +1,7 @@
 {
-  "name": "twitter_profile",
+  "name": "alibi",
   "version": "1.0.0",
-  "description": "Demo TLSNotary plugin to notarize the ownership of a twitter profile",
+  "description": "TLSNotary plugin to notarise Google Timeline data",
   "main": "src/index.ts",
   "scripts": {
     "build": "node esbuild.js"
@@ -11,6 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "@extism/js-pdk": "^1.0.1",
+    "@types/node": "^22.4.1",
     "esbuild": "^0.19.6",
     "typescript": "^5.3.2"
   }
