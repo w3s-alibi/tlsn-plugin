@@ -32,7 +32,7 @@
     ],
     "requests": [
         {
-            "url": "https://timeline.google.com/maps/timeline/_rpc/ma",
+            "url": "https://timeline.google.com/maps/timeline/_rpc/ma?rapt=*&pb=*",
             "method": "GET"
         }
     ]
